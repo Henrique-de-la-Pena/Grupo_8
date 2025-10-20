@@ -117,3 +117,12 @@ li {
     text-align: center;
     font-weight: bold;
 }
+
+.total {
+    border: .25rem solid black;
+    background-color: #646464;
+    padding: 1rem;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
