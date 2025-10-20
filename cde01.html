@@ -3,6 +3,9 @@
     <head>
         <title>Meu Negócio</title>
         <meta charset = 'UTF-8'>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
         <header>
@@ -11,20 +14,24 @@
             </h1>
         </header>
         <main>
-            <p>
-                Digite o produto:
-            </p>
-            <input>
-            <p>
+            <a href="controledeestoque.html" class="return">
+                <img src="img/return.png" alt="return" width="30" height="30">
+            </a>
+            <div class="adproduto">
+                <div class="digitar">
+                    Digite o produto:
+                    <input size="3" class="botao">
+                </div>
+            <div class="quantidade">
                 Informe a quantidade:
-            </p>
-            <input size="1">
-            <p>
+            <input size="1" class="botao">
+            </div>
+            <div class="preço">
                 Informe o preço:
                 R$
-            </p>
-            <input size="1">
-            <input type="submit">
+            <input size="1" class="botao">
+            </div>
+            <input type="submit" class="confirmar">
         </main>
         <footer>
                 <img src="img/listbutton.png" alt="list" width="30" height="30">
