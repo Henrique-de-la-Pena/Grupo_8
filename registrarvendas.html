@@ -3,6 +3,9 @@
     <head>
         <title>Meu Negócio</title>
         <meta charset = 'UTF-8'>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
         <header>
@@ -11,18 +14,23 @@
             </h1>
         </header>
         <main>
-            <p>
-                Selecione os produtos vendidos:
-            </p>
+            <a href="index.html" class="return">
+                <img src="img/return.png" alt="return" width="30" height="30">
+            </a>
+            <div class="adproduto">
+                <div class="digitar">
+                    Selecione os produtos vendidos:
+                    <input size="3" class="botao">
+                </div>
             <ul>
-                <li><input size="1"> Lorem Ipsum R$xx,xx</li>
-                <li><input size="1"> Lorem Ipsum R$xx,xx</li>
-                <li><input size="1"> Lorem Ipsum R$xx,xx</li>
-                <li><input size="1"> Lorem Ipsum R$xx,xx</li>
+                <li><input size="1" class="controle"> <div>Geleia</div> <div>R$10,00</div></li>
+                <li><input size="1" class="controle"> <div>Ovos</div> <div>R$07,00</div></li>
+                <li><input size="1" class="controle"> <div>Arroz 5kg</div> <div>R$15,00</div></li>
             </ul>
-            <a href="reg01.html">
+            <a href="reg01.html" class="confirmar">
                 Encerrar venda
             </a>
+            </div>
         </main>
         <footer>
                 <img src="img/listbutton.png" alt="list" width="30" height="30">
