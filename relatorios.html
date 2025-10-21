@@ -3,6 +3,9 @@
     <head>
         <title>Meu Negócio</title>
         <meta charset = 'UTF-8'>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
         <header>
@@ -11,9 +14,20 @@
             </h1>
         </header>
         <main>
-            Selecione o periodo desejado:
-            <input>
-            <a href="rel01.html">
+            <a href="index.html" class="return">
+                <img src="img/return.png" alt="return" width="30" height="30">
+            </a>
+            <div class="selecionar">
+                Selecione o período desejado:
+                <select class="botao">
+                    <option> Hoje </option>
+                    <option> Esssa Semana </option>
+                    <option> Essse Mês </option>
+                    <option> Últimos 60 dias </option>
+                    <option> Últimos 90 dias </option>
+                <select>
+            </div>
+            <a href="rel01.html" class="confirmar">
                 Ver relatório
             </a>
         </main>
