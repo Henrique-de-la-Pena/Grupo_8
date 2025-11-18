@@ -49,5 +49,18 @@
   function salvarNomeLoja(nome) {
     localStorage.setItem(STORAGE_KEYS.NOME_LOJA, nome);
   }
+  
+  function garantirEstoqueInicial() {
+    const estoque = carregarEstoque();
+    if (estoque.length > 0) return;
+
+    const inicial = [
+      { id: 1, nome: "Pão de Forma", quantidade: 10, preco: 8.0 },
+      { id: 2, nome: "Cartela de Ovo", quantidade: 7, preco: 7.0 },
+      { id: 3, nome: "Geleia de Morango", quantidade: 5, preco: 10.0 },
+      { id: 4, nome: "Pacotes de Macarrão", quantidade: 3, preco: 6.0 },
+    ];
+    salvarEstoque(inicial);
+  }
 
   })();
