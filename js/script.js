@@ -158,4 +158,80 @@
     });
   }
 
+  // Registrar Vendas
+    function atualizarEstoqueAposVenda(venda) {
+    let estoque = carregarEstoque();
+    let alterou = false;
+
+    venda.itens.forEach((itemVenda) => {
+      const produto = estoque.find((p) => p.nome === itemVenda.nome);
+      if (!produto) return;
+      produto.quantidade = Math.max(0, produto.quantidade - itemVenda.quantidade);
+      alterou = true;
+    });
+
+    if (alterou) salvarEstoque(estoque);
+  }
+
+  function initRegistrarVendas() {
+    const main = document.querySelector("main");
+    if (!main) return;
+
+    const itensLi = Array.from(main.querySelectorAll(".adproduto ul li"));
+    const btnEncerrar = main.querySelector(".confirmar");
+
+    if (!btnEncerrar || itensLi.length === 0) return;
+
+    btnEncerrar.addEventListener("click", function (event) {
+      event.preventDefault();
+
+      const itensVenda = [];
+      let totalVenda = 0;
+
+      itensLi.forEach((li) => {
+        const inputQtd = li.querySelector("input");
+        const divs = li.querySelectorAll("div");
+        if (!inputQtd || divs.length < 2) return;
+
+        const qtd = parseInt(inputQtd.value, 10) || 0;
+        if (qtd <= 0) return;
+
+        const nome = divs[0].textContent.trim();
+        const precoUnitario = parsePreco(divs[1].textContent);
+        const subtotal = precoUnitario * qtd;
+
+        itensVenda.push({
+          nome: nome,
+          quantidade: qtd,
+          precoUnitario: precoUnitario,
+          subtotal: subtotal,
+        });
+
+        totalVenda += subtotal;
+      });
+
+      if (itensVenda.length === 0) {
+        alert("Informe pelo menos a quantidade de um produto.");
+        return;
+      }
+
+      const vendas = carregarVendas();
+      const novaVenda = {
+        id: gerarId(),
+        data: new Date().toISOString(),
+        itens: itensVenda,
+        total: totalVenda,
+      };
+
+      vendas.push(novaVenda);
+      salvarVendas(vendas);
+
+      salvarJson(STORAGE_KEYS.VENDA_ATUAL, novaVenda);
+
+      atualizarEstoqueAposVenda(novaVenda);
+
+      window.location.href = "reg01.html";
+    });
+  }
+
   })();
