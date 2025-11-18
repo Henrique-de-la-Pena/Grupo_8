@@ -107,4 +107,55 @@
     renderizarListaEstoque();
   }
 
+  // CDE
+  function initCDE01() {
+    const main = document.querySelector("main");
+    if (!main) return;
+
+    const inputNome = main.querySelector(".adproduto .digitar input");
+    const inputQtd = main.querySelector(".quantidade input");
+    const inputPreco = main.querySelector(".preço input");
+    const btnConfirmar = main.querySelector(".confirmar");
+
+    if (!inputNome || !inputQtd || !inputPreco || !btnConfirmar) return;
+
+    btnConfirmar.addEventListener("click", function (event) {
+      event.preventDefault();
+
+      const nome = (inputNome.value || "").trim();
+      const qtd = parseInt(inputQtd.value, 10);
+      const preco = parsePreco(inputPreco.value);
+
+      if (!nome) {
+        alert("Digite o nome do produto.");
+        return;
+      }
+      if (isNaN(qtd) || qtd <= 0) {
+        alert("Informe uma quantidade válida (maior que 0).");
+        return;
+      }
+      if (isNaN(preco) || preco < 0) {
+        alert("Informe um preço válido.");
+        return;
+      }
+
+      const estoque = carregarEstoque();
+      estoque.push({
+        id: gerarId(),
+        nome: nome,
+        quantidade: qtd,
+        preco: preco,
+      });
+      salvarEstoque(estoque);
+
+      alert("Produto cadastrado com sucesso!");
+
+      inputNome.value = "";
+      inputQtd.value = "";
+      inputPreco.value = "";
+
+      window.location.href = "controledeestoque.html";
+    });
+  }
+
   })();
