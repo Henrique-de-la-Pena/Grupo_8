@@ -405,4 +405,46 @@
     }
   }
 
+  // Iniciar
+  function initApp() {
+    aplicarNomeLoja();
+
+    const pagina = location.pathname.split("/").pop();
+
+    switch (pagina) {
+      case "":
+      case "index.html":
+        initIndex();
+        break;
+      case "controledeestoque.html":
+        initControleDeEstoque();
+        break;
+      case "cde01.html":
+        initCDE01();
+        break;
+      case "registrarvendas.html":
+        initRegistrarVendas();
+        break;
+      case "reg01.html":
+        initReg01();
+        break;
+      case "relatorios.html":
+        initRelatorios();
+        break;
+      case "rel01.html":
+        initRel01();
+        break;
+      case "perfil.html":
+        initPerfil();
+        break;
+      case "settings.html":
+        initSettings();
+        break;
+      default:
+        break;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", initApp);
+
   })();
