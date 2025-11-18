@@ -1,5 +1,3 @@
-// js/app.js
-
 (function () {
   // Chaves usadas no localStorage
   const STORAGE_KEYS = {
@@ -83,7 +81,6 @@
     return "R$" + valor.toFixed(2).replace(".", ",");
   }
 
-  // Atualiza o <h1> com o nome salvo da loja
   function aplicarNomeLoja() {
     const h1 = document.querySelector("header h1");
     if (!h1) return;
@@ -93,8 +90,6 @@
   // ---------- PÁGINA: INDEX.HTML ----------
 
   function initIndex() {
-    // Aqui por enquanto só aplicamos o nome da loja.
-    // Se quiser, depois a gente coloca resumos (total de produtos, etc.).
   }
 
   // ---------- PÁGINA: CONTROLEDEESTOQUE.HTML ----------
@@ -125,7 +120,7 @@ function renderizarListaEstoque() {
 }
 
 function initControleDeEstoque() {
-  garantirEstoqueInicial();   // se quiser manter o seed (mesmo que hoje esteja vazio)
+  garantirEstoqueInicial();   
   renderizarListaEstoque();   // monta a lista com filtro de quantidade > 0
 }
 
@@ -249,18 +244,18 @@ function initRegistrarVendas() {
   if (!ul || !btnEncerrar) return;
 
   // Monta a lista de produtos em estoque
-  garantirEstoqueInicial(); // se quiser manter o seed
+  garantirEstoqueInicial();
   renderListaProdutosVenda(ul);
 
   btnEncerrar.addEventListener("click", function (event) {
     event.preventDefault();
 
-    const estoque = carregarEstoque();  // vamos conferir contra o estoque real
+    const estoque = carregarEstoque(); 
     const itensLi = Array.from(ul.querySelectorAll("li"));
     const itensVenda = [];
     let totalVenda = 0;
 
-    let erroEstoque = null; // se algum produto passar do limite, guardamos aqui
+    let erroEstoque = null; // se algum produto passar do limite
 
     itensLi.forEach((li) => {
       const inputQtd = li.querySelector("input");
@@ -273,11 +268,11 @@ function initRegistrarVendas() {
       const nome = divs[0].textContent.trim();        // nome do produto
       const precoUnitario = parsePreco(divs[1].textContent);
 
-      // 🔎 procura esse produto no estoque
+      // procura produto no estoque
       const produtoEstoque = estoque.find((p) => p.nome === nome);
       const disponivel = produtoEstoque ? produtoEstoque.quantidade : 0;
 
-      // ❌ se pediu mais do que tem, marca erro e nem monta itensVenda
+      // se pediu mais do que tem, marca erro e nem monta itensVenda
       if (qtd > disponivel && !erroEstoque) {
         erroEstoque = {
           nome,
@@ -393,7 +388,7 @@ function initRegistrarVendas() {
     // Diminui a quantidade
     produto.quantidade -= itemVenda.quantidade;
 
-    // Se quiser impedir negativo:
+    // Impedir negativo:
     if (produto.quantidade < 0) {
     produto.quantidade = 0;
     }
@@ -548,15 +543,9 @@ if (alterou) {
   // ---------- PÁGINAS: PERFIL.HTML / SETTINGS.HTML (extra simples) ----------
 
   function initPerfil() {
-    // Por enquanto só deixamos o nome da loja no <h1>.
-    // Se depois você quiser deixar nome e endereço dinâmicos, dá pra puxar de localStorage também.
   }
 
   function initSettings() {
-    // Sugestão futura:
-    // - criar um input para alterar o nome da loja
-    // - ao salvar, chamar salvarNomeLoja(novoNome)
-    // - e usar aplicarNomeLoja() nas páginas
   }
 
   // ---------- INICIALIZAÇÃO GERAL ----------
