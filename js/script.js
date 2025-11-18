@@ -78,4 +78,33 @@
     return "R$" + valor.toFixed(2).replace(".", ",");
   }
 
+// Controle de Estoque
+
+  function renderizarListaEstoque() {
+    const ul = document.querySelector("main .lista ul");
+    if (!ul) return;
+
+    const estoque = carregarEstoque();
+
+    ul.innerHTML = "";
+
+    if (estoque.length === 0) {
+      const li = document.createElement("li");
+      li.textContent = "Nenhum produto cadastrado.";
+      ul.appendChild(li);
+      return;
+    }
+
+    estoque.forEach((produto) => {
+      const li = document.createElement("li");
+      li.textContent = `X ${produto.quantidade} - ${produto.nome}`;
+      ul.appendChild(li);
+    });
+  }
+
+  function initControleDeEstoque() {
+    garantirEstoqueInicial();
+    renderizarListaEstoque();
+  }
+
   })();
