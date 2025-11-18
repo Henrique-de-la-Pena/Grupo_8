@@ -234,4 +234,42 @@
     });
   }
 
+  // reg
+    function initReg01() {
+    const main = document.querySelector("main");
+    if (!main) return;
+
+    const vendaAtual = carregarJson(STORAGE_KEYS.VENDA_ATUAL, null);
+    if (!vendaAtual) {
+      return;
+    }
+
+    const ul = main.querySelector(".adproduto ul");
+    const divTotal = main.querySelector(".adproduto .total");
+
+    if (!ul || !divTotal) return;
+
+    ul.innerHTML = "";
+
+    vendaAtual.itens.forEach((item) => {
+      const li = document.createElement("li");
+
+      const divQtd = document.createElement("div");
+      divQtd.textContent = `${item.quantidade}X`;
+
+      const divNome = document.createElement("div");
+      divNome.textContent = item.nome;
+
+      const divPreco = document.createElement("div");
+      divPreco.textContent = formatarPreco(item.subtotal);
+
+      li.appendChild(divQtd);
+      li.appendChild(divNome);
+      li.appendChild(divPreco);
+      ul.appendChild(li);
+    });
+
+    divTotal.textContent = "Total: " + formatarPreco(vendaAtual.total);
+  }
+
   })();
