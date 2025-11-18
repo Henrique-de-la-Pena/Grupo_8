@@ -272,4 +272,137 @@
     divTotal.textContent = "Total: " + formatarPreco(vendaAtual.total);
   }
 
+  //Relatorios
+    function initRelatorios() {
+    const main = document.querySelector("main");
+    if (!main) return;
+
+    const select = main.querySelector(".selecionar select, .selecionar .botao");
+    const btnVer = main.querySelector(".confirmar");
+
+    if (!select || !btnVer) return;
+
+    btnVer.addEventListener("click", function (event) {
+      event.preventDefault();
+      const valor = (select.value || select.textContent || "").trim();
+      localStorage.setItem(STORAGE_KEYS.FILTRO_RELATORIO, valor);
+      window.location.href = "rel01.html";
+    });
+  }
+
+  //rel01
+    function filtrarVendasPorPeriodo(vendas, filtroTexto) {
+    if (!filtroTexto) return vendas;
+
+    const agora = new Date();
+    const msDia = 24 * 60 * 60 * 1000;
+
+    function dentroDosUltimosDias(venda, dias) {
+      const data = new Date(venda.data);
+      const diff = agora - data;
+      return diff >= 0 && diff <= dias * msDia;
+    }
+
+    const filtro = filtroTexto.toLowerCase();
+
+    if (filtro.includes("hoje")) {
+      return vendas.filter((v) => {
+        const d = new Date(v.data);
+        return (
+          d.getDate() === agora.getDate() &&
+          d.getMonth() === agora.getMonth() &&
+          d.getFullYear() === agora.getFullYear()
+        );
+      });
+    } else if (filtro.includes("semana")) {
+      return vendas.filter((v) => dentroDosUltimosDias(v, 7));
+    } else if (filtro.includes("mês")) {
+      return vendas.filter((v) => dentroDosUltimosDias(v, 30));
+    } else if (filtro.includes("60")) {
+      return vendas.filter((v) => dentroDosUltimosDias(v, 60));
+    } else if (filtro.includes("90")) {
+      return vendas.filter((v) => dentroDosUltimosDias(v, 90));
+    }
+
+    return vendas;
+  }
+
+  function initRel01() {
+    const main = document.querySelector("main");
+    if (!main) return;
+
+    const vendas = carregarVendas();
+    const filtro = localStorage.getItem(STORAGE_KEYS.FILTRO_RELATORIO) || "";
+    const vendasFiltradas = filtrarVendasPorPeriodo(vendas, filtro);
+
+    const cabRelatorio = main.querySelector(".cabrelatorio");
+    const ulMaisVendidos = main.querySelector(".lista ul");
+    const divEstoqueBaixo = main.querySelector(".prodestoque");
+    const divTotal = main.querySelector(".total");
+
+    if (cabRelatorio && filtro) {
+      cabRelatorio.textContent = `Relatório - ${filtro}`;
+    }
+
+    if (ulMaisVendidos) {
+      ulMaisVendidos.innerHTML = "";
+
+      const mapaProdutos = new Map();
+
+      vendasFiltradas.forEach((venda) => {
+        venda.itens.forEach((item) => {
+          if (!mapaProdutos.has(item.nome)) {
+            mapaProdutos.set(item.nome, { quantidade: 0, receita: 0 });
+          }
+          const atual = mapaProdutos.get(item.nome);
+          atual.quantidade += item.quantidade;
+          atual.receita += item.subtotal;
+        });
+      });
+
+      const listaOrdenada = Array.from(mapaProdutos.entries()).sort(
+        (a, b) => b[1].quantidade - a[1].quantidade
+      );
+
+      if (listaOrdenada.length === 0) {
+        const li = document.createElement("li");
+        li.textContent = "Nenhuma venda nesse período.";
+        ulMaisVendidos.appendChild(li);
+      } else {
+        listaOrdenada.forEach(([nome, dados]) => {
+          const li = document.createElement("li");
+          const divNome = document.createElement("div");
+          const divQtd = document.createElement("div");
+
+          divNome.textContent = nome;
+          divQtd.textContent = `${dados.quantidade}X`;
+
+          li.appendChild(divNome);
+          li.appendChild(divQtd);
+          ulMaisVendidos.appendChild(li);
+        });
+      }
+    }
+
+    if (divEstoqueBaixo) {
+      const estoque = carregarEstoque();
+      const criticos = estoque.filter((p) => p.quantidade <= 1);
+
+      if (criticos.length === 0) {
+        divEstoqueBaixo.textContent = "Nenhum produto com estoque baixo.";
+      } else {
+        const texto = criticos
+          .map((p) => `${p.nome} - ${p.quantidade}X`)
+          .join(" | ");
+        divEstoqueBaixo.textContent = texto;
+      }
+    }
+
+    // Receita total
+    if (divTotal) {
+      const receita = vendasFiltradas.reduce((soma, v) => soma + v.total, 0);
+      divTotal.textContent = "Receita Total: " + formatarPreco(receita);
+    }
+  }
+
   })();
