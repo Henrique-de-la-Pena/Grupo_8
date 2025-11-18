@@ -124,6 +124,12 @@ function renderizarListaEstoque() {
   });
 }
 
+function initControleDeEstoque() {
+  garantirEstoqueInicial();   // se quiser manter o seed (mesmo que hoje esteja vazio)
+  renderizarListaEstoque();   // monta a lista com filtro de quantidade > 0
+}
+
+
   // ---------- PÁGINA: CDE01.HTML (Adicionar Produtos) ----------
 
   function initCDE01() {
@@ -249,9 +255,12 @@ function initRegistrarVendas() {
   btnEncerrar.addEventListener("click", function (event) {
     event.preventDefault();
 
+    const estoque = carregarEstoque();  // vamos conferir contra o estoque real
     const itensLi = Array.from(ul.querySelectorAll("li"));
     const itensVenda = [];
     let totalVenda = 0;
+
+    let erroEstoque = null; // se algum produto passar do limite, guardamos aqui
 
     itensLi.forEach((li) => {
       const inputQtd = li.querySelector("input");
@@ -263,6 +272,21 @@ function initRegistrarVendas() {
 
       const nome = divs[0].textContent.trim();        // nome do produto
       const precoUnitario = parsePreco(divs[1].textContent);
+
+      // 🔎 procura esse produto no estoque
+      const produtoEstoque = estoque.find((p) => p.nome === nome);
+      const disponivel = produtoEstoque ? produtoEstoque.quantidade : 0;
+
+      // ❌ se pediu mais do que tem, marca erro e nem monta itensVenda
+      if (qtd > disponivel && !erroEstoque) {
+        erroEstoque = {
+          nome,
+          disponivel,
+          solicitado: qtd,
+        };
+        return;
+      }
+
       const subtotal = precoUnitario * qtd;
 
       itensVenda.push({
@@ -274,6 +298,16 @@ function initRegistrarVendas() {
 
       totalVenda += subtotal;
     });
+
+    // Se teve algum erro de estoque, avisa e cancela a venda
+    if (erroEstoque) {
+      alert(
+        `Quantidade indisponível para o produto "${erroEstoque.nome}".\n` +
+        `Disponível em estoque: ${erroEstoque.disponivel}\n` +
+        `Você tentou vender: ${erroEstoque.solicitado}`
+      );
+      return;
+    }
 
     if (itensVenda.length === 0) {
       alert("Informe pelo menos a quantidade de um produto.");
@@ -301,6 +335,7 @@ function initRegistrarVendas() {
     window.location.href = "reg01.html";
   });
 }
+
 
   // ---------- PÁGINA: REG01.HTML (Resumo da Venda) ----------
 
