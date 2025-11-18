@@ -49,7 +49,7 @@
   function salvarNomeLoja(nome) {
     localStorage.setItem(STORAGE_KEYS.NOME_LOJA, nome);
   }
-  
+
   function garantirEstoqueInicial() {
     const estoque = carregarEstoque();
     if (estoque.length > 0) return;
@@ -61,6 +61,21 @@
       { id: 4, nome: "Pacotes de Macarrão", quantidade: 3, preco: 6.0 },
     ];
     salvarEstoque(inicial);
+  }
+
+  function gerarId() {
+    return Date.now() + Math.floor(Math.random() * 1000);
+  }
+
+  function parsePreco(texto) {
+    if (typeof texto !== "string") return 0;
+    const limpo = texto.replace("R$", "").replace(".", "").replace(",", ".").trim();
+    const num = parseFloat(limpo);
+    return isNaN(num) ? 0 : num;
+  }
+
+  function formatarPreco(valor) {
+    return "R$" + valor.toFixed(2).replace(".", ",");
   }
 
   })();
